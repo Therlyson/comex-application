@@ -1,4 +1,4 @@
-package org.example.services;
+package org.example.conexao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
