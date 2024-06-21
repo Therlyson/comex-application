@@ -5,14 +5,14 @@ import org.example.services.CategoriaService;
 
 import java.util.List;
 
-public class TesteCategoria {
+public class MainCategoria {
     public static void main(String[] args) {
-//        Categoria categoria = new Categoria("Marketing", "Categoria de produtos de markenting");
-//        Categoria categoria1 = new Categoria("Finanças", "finanças é aqui");
-//
+        Categoria categoria = new Categoria("Marketing", "Categoria de produtos de markenting");
+        Categoria categoria1 = new Categoria("Finanças", "finanças é aqui");
+
         CategoriaService categoriaService = new CategoriaService();
-//        categoriaService.cadastrarCategoria(categoria);
-//        categoriaService.cadastrarCategoria(categoria1);
+        categoriaService.cadastrarCategoria(categoria);
+        categoriaService.cadastrarCategoria(categoria1);
 
         List<Categoria> categoriaList =  categoriaService.listarCategorias();
         for(Categoria c: categoriaList){

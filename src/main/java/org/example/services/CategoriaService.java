@@ -31,6 +31,10 @@ public class CategoriaService {
         return categoriaDAO().consultarCategoriasPorNome();
     }
 
+    public Categoria buscarCategoriaId(Long id){
+        return categoriaDAO().buscarCategoria(id);
+    }
+
     public Categoria alterarCategoria(Long id, String nome, String descricao){
         Categoria categoria = categoriaDAO().buscarCategoria(id);
         if(categoria != null){
