@@ -1,6 +1,12 @@
 package org.example.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cliente")
 public class Cliente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cpf;
     private String nome;
@@ -15,6 +21,10 @@ public class Cliente {
         this.email = email;
         this.telefone = telefone;
         this.cep = cep;
+    }
+
+    public Cliente(){
+
     }
 
     public Cliente(String cpf, String nome, String email, String telefone, String cep) {

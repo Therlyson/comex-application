@@ -1,44 +1,64 @@
 package org.example.services;
 
-import org.example.conexao.ConnectionFactory;
-import org.example.dao.ClienteDAO;
+import org.example.dao.JpaClienteDao;
+import org.example.exception.ClienteException;
 import org.example.model.Cliente;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class ClienteService {
-    private ConnectionFactory factory;
+    private JpaClienteDao clienteDao;
 
-    public ClienteService(){
-        factory = new ConnectionFactory();
+    public ClienteService(EntityManager manager) {
+        this.clienteDao = new JpaClienteDao(manager);
     }
 
-    private ClienteDAO clienteDAO(){
-        Connection connection = factory.criaConexao();
-        return new ClienteDAO(connection);
-    }
-
-    public Boolean salvarNoBanco(Cliente cliente){
-        return clienteDAO().salvar(cliente);
-    }
-
-    public List<Cliente> listarClientesDoBanco(){
-        return clienteDAO().listar();
-    }
-
-    public Cliente buscarCliente(Long id){
-        return clienteDAO().buscarCliente(id);
-    }
-
-    public Cliente atualizarCliente(Cliente cliente){
-        return clienteDAO().atualizar(cliente);
-    }
-
-    public Boolean removerCLiente(Long id){
-        if(buscarCliente(id) != null){
-            return clienteDAO().remover(id);
+    public void salvarCliente(Cliente cliente) throws ClienteException {
+        try {
+            clienteDao.salvar(cliente);
+        } catch (Exception e) {
+            throw new ClienteException("Erro ao salvar o cliente no banco de dados.", e);
         }
-        return false;
+    }
+
+    public List<Cliente> listarTodosOsClientes() throws ClienteException {
+        try {
+            List<Cliente> clientes = clienteDao.listar();
+            if(!clientes.isEmpty()){
+                return clientes;
+            }else{
+                return null;
+            }
+        } catch (Exception e) {
+            throw new ClienteException("Erro ao listar clientes do banco de dados.", e);
+        }
+    }
+
+    public Cliente pesquisarClientePorId(Long id) throws ClienteException {
+        try {
+            Cliente cliente = clienteDao.pesquisarPorId(id);
+            return cliente;
+        } catch (Exception e) {
+            throw new ClienteException("Erro ao pesquisar cliente do banco de dados.", e);
+        }
+    }
+
+    public Cliente atualizarCliente(Cliente cliente) throws ClienteException{
+        try{
+            Cliente clienteAtualizado = clienteDao.atualizar(cliente);
+            return clienteAtualizado;
+        }catch (Exception e){
+            throw new ClienteException("Erro ao tentar atualizar cliente do banco de dados.", e);
+        }
+    }
+
+    public void removerCLiente(Long id) throws ClienteException {
+        Cliente cliente = pesquisarClientePorId(id);
+        try{
+            clienteDao.remover(cliente);
+        }catch (Exception e){
+            throw new ClienteException("Erro ao tentar remover cliente do banco de dados.", e);
+        }
     }
 }
