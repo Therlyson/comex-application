@@ -1,50 +1,65 @@
 package org.example.services;
 
 import org.example.conexao.ConnectionFactory;
-import org.example.dao.ProdutoDAO;
+import org.example.dao.JpaProdutoDao;
+import org.example.exception.ComexException;
 import org.example.model.Categoria;
 import org.example.model.Produto;
 
+import javax.persistence.EntityManager;
 import java.sql.Connection;
 import java.util.List;
 
 public class ProdutoService {
-    private ConnectionFactory factory;
+    private JpaProdutoDao produtoDao;
 
-    public ProdutoService(){
-        factory = new ConnectionFactory();
+    public ProdutoService(EntityManager manager){
+        this.produtoDao = new JpaProdutoDao(manager);
     }
 
-    private ProdutoDAO produtoDAO(){
-        Connection connection = factory.criaConexao();
-        return new ProdutoDAO(connection);
-    }
-
-    public Boolean cadastrarProduto(Produto produto){
-        return produtoDAO().cadastrarProduto(produto);
+    public void cadastrarProduto(Produto produto){
+        try {
+            produtoDao.cadastrar(produto);
+        } catch (Exception e) {
+            throw new ComexException("Erro ao cadastrar o produto no banco de dados.", e);
+        }
     }
 
     public List<Produto> listarProdutos(){
-        return produtoDAO().listarProdutos();
+        try {
+            return produtoDao.listar();
+        } catch (Exception e) {
+            throw new ComexException("Erro ao listar os produtos do banco de dados.", e);
+        }
     }
 
     public List<String> consultarProdutosPorNome(){
-        return produtoDAO().consultarProdutosPorNome();
+        try {
+            return produtoDao.consultarPorNome();
+        } catch (Exception e) {
+            throw new ComexException("Erro ao listar os produtos do banco de dados.", e);
+        }
     }
 
     public Produto alterarProduto(Long id, String nome, String descricao, Double preco, Categoria categoria){
-        Produto produto = produtoDAO().buscarProduto(id);
-        if(produto != null){
-            produto.setNome(nome);
-            produto.setDescricao(descricao);
-            produto.setPreco(preco);
-            produto.setCategoria(categoria);
-            return produtoDAO().alterarProduto(produto);
+        Produto produto = produtoDao.buscarPorId(id);
+        produto.setNome(nome);
+        produto.setDescricao(descricao);
+        produto.setPreco(preco);
+        produto.setCategoria(categoria);
+        try {
+            return produtoDao.alterar(produto);
+        } catch (Exception e) {
+            throw new ComexException("Erro ao alterar o produto do banco de dados.", e);
         }
-        return null;
     }
 
-    public Boolean removerProduto(Long id){
-        return produtoDAO().remover(id);
+    public void removerProduto(Long id){
+        Produto produto = produtoDao.buscarPorId(id);
+        try {
+            produtoDao.remover(produto);
+        } catch (Exception e) {
+            throw new ComexException("Erro ao listar os produtos do banco de dados.", e);
+        }
     }
 }

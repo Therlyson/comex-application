@@ -2,7 +2,9 @@ package org.example;
 
 import org.example.model.Categoria;
 import org.example.services.CategoriaService;
+import org.example.utils.JPAutil;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class MainCategoria {
@@ -10,7 +12,8 @@ public class MainCategoria {
         Categoria categoria = new Categoria("Marketing", "Categoria de produtos de markenting");
         Categoria categoria1 = new Categoria("Finanças", "finanças é aqui");
 
-        CategoriaService categoriaService = new CategoriaService();
+        EntityManager em = JPAutil.getEntityManager();
+        CategoriaService categoriaService = new CategoriaService(em);
         categoriaService.cadastrarCategoria(categoria);
         categoriaService.cadastrarCategoria(categoria1);
 
@@ -26,12 +29,12 @@ public class MainCategoria {
             System.out.println(c);
         }
 
-        Categoria alterando = categoriaService.alterarCategoria(1L, "Plásticos", "Apenas produtos de plasticos");
+        Categoria categoriaBusca = categoriaService.buscarCategoriaId(1L);
+        categoriaBusca.setNome("Category");
+        Categoria alterando = categoriaService.alterarCategoria(categoriaBusca);
         System.out.println(alterando);
 
-        Boolean removendo = categoriaService.removerCategoria(2L);
-        if(removendo){
-            System.out.println("Categoria removida com sucesso");
-        }
+        categoriaService.removerCategoria(2L);
+        em.close();
     }
 }

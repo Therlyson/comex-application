@@ -14,15 +14,6 @@ public class Cliente {
     private String telefone;
     private String cep;
 
-    public Cliente(Long id, String cpf, String nome, String email, String telefone, String cep) {
-        this.id = id;
-        this.cpf = cpf;
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.cep = cep;
-    }
-
     public Cliente(){
 
     }
@@ -34,7 +25,6 @@ public class Cliente {
         this.telefone = telefone;
         this.cep = cep;
     }
-
 
     public Long getId() {
         return id;

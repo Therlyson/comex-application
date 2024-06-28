@@ -1,19 +1,18 @@
 package org.example.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "produto")
 public class Produto {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String descricao;
     private Double preco;
+    @ManyToOne
     private Categoria categoria;
-
-    public Produto(Long id, String nome, String descricao, Double preco, Categoria categoria) {
-        this.id = id;
-        this.nome = nome;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.categoria = categoria;
-    }
 
     public Produto(String nome, String descricao, Double preco, Categoria categoria) {
         this.nome = nome;
@@ -21,6 +20,8 @@ public class Produto {
         this.preco = preco;
         this.categoria = categoria;
     }
+
+    public Produto(){}
 
     public Long getId() {
         return id;

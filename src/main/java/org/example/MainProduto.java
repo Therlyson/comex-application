@@ -4,15 +4,18 @@ import org.example.model.Categoria;
 import org.example.model.Produto;
 import org.example.services.CategoriaService;
 import org.example.services.ProdutoService;
+import org.example.utils.JPAutil;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Scanner;
 
 public class MainProduto {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        CategoriaService categoriaService = new CategoriaService();
-        ProdutoService produtoService = new ProdutoService();
+        EntityManager manager = JPAutil.getEntityManager();
+        CategoriaService categoriaService = new CategoriaService(manager);
+        ProdutoService produtoService = new ProdutoService(manager);
 
         while (true) {
             System.out.println("\nEscolha uma opção:");
@@ -40,7 +43,7 @@ public class MainProduto {
                         System.out.println(c);
                     }
 
-                    System.out.print("\nDigite o ID da categoria do produto: ");
+                    System.out.print("\nDigite o ID da categoria do novo produto: ");
                     long categoriaId = scanner.nextLong();
                     scanner.nextLine();
 
@@ -80,7 +83,7 @@ public class MainProduto {
                     for(Categoria c: categorias2){
                         System.out.println(c);
                     }
-                    System.out.print("\nDigite o novo ID da categoria do produto: ");
+                    System.out.print("\nDigite o novo ID da nova categoria do produto: ");
                     long novaCategoriaId = scanner.nextLong();
                     scanner.nextLine();
 
@@ -100,6 +103,7 @@ public class MainProduto {
                 case 6:
                     System.out.println("Saindo...");
                     scanner.close();
+                    manager.close();
                     return;
 
                 default:

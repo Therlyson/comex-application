@@ -1,51 +1,69 @@
 package org.example.services;
 
-import org.example.conexao.ConnectionFactory;
-import org.example.dao.CategoriaDAO;
+import org.example.dao.JpaCategoriaDao;
+import org.example.exception.ComexException;
 import org.example.model.Categoria;
 
-import java.sql.Connection;
+import javax.persistence.EntityManager;
 import java.util.List;
 
 public class CategoriaService {
-    private ConnectionFactory factory;
+    private JpaCategoriaDao categoriaDao;
 
-    public CategoriaService(){
-        factory = new ConnectionFactory();
+    public CategoriaService(EntityManager manager) {
+        this.categoriaDao = new JpaCategoriaDao(manager);
     }
 
-    private CategoriaDAO categoriaDAO(){
-        Connection connection = factory.criaConexao();
-        return new CategoriaDAO(connection);
-    }
-
-    public Boolean cadastrarCategoria(Categoria categoria){
-        return categoriaDAO().cadastrarCategoria(categoria);
+    public void cadastrarCategoria(Categoria categoria){
+        try {
+            categoriaDao.cadastrar(categoria);
+        } catch (Exception e) {
+            throw new ComexException("Erro ao tentar cadastrar categoria no banco de dados.", e);
+        }
     }
 
     public List<Categoria> listarCategorias(){
-        return categoriaDAO().listarCategorias();
+        try{
+            List<Categoria> categorias = categoriaDao.listar();
+            return categorias;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel listar as categorias do banco de dados.", e);
+        }
     }
 
     public List<String> consultarCategoriasPorNome(){
-        return categoriaDAO().consultarCategoriasPorNome();
+        try{
+            List<String> categoriasNome = categoriaDao.consultarPorNome();
+            return categoriasNome;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel listar as categorias do banco de dados.", e);
+        }
     }
 
     public Categoria buscarCategoriaId(Long id){
-        return categoriaDAO().buscarCategoria(id);
-    }
-
-    public Categoria alterarCategoria(Long id, String nome, String descricao){
-        Categoria categoria = categoriaDAO().buscarCategoria(id);
-        if(categoria != null){
-            categoria.setNome(nome);
-            categoria.setDescricao(descricao);
-            return categoriaDAO().alterar(categoria);
+        try{
+            Categoria categoria = categoriaDao.buscarPorId(id);
+            return categoria;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel buscar essa categoria do banco de dados.", e);
         }
-        return null;
     }
 
-    public Boolean removerCategoria(Long id){
-        return categoriaDAO().remover(id);
+    public Categoria alterarCategoria(Categoria categoria){
+        try{
+            Categoria novaCategoria = categoriaDao.alterar(categoria);
+            return novaCategoria;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel alterar essa categoria.", e);
+        }
+    }
+
+    public void removerCategoria(Long id){
+        Categoria categoria = categoriaDao.buscarPorId(id);
+        try{
+            categoriaDao.remover(categoria);
+        }catch (Exception e){
+            throw new ComexException("Erro! não foi possivel remover essa categoria do banco de dados.", e);
+        }
     }
 }

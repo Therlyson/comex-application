@@ -1,6 +1,12 @@
 package org.example.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "categoria")
 public class Categoria {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String descricao;
@@ -10,6 +16,8 @@ public class Categoria {
         this.nome = nome;
         this.descricao = descricao;
     }
+
+    public Categoria(){}
 
     public Categoria(String nome, String descricao) {
         this.nome = nome;
