@@ -13,6 +13,7 @@ public class JpaClienteDao {
     }
 
     public void salvar(Cliente cliente) {
+        this.manager.getTransaction().begin();
         this.manager.persist(cliente);
         this.manager.getTransaction().commit();
     }

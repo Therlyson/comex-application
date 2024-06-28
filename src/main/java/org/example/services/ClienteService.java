@@ -25,17 +25,13 @@ public class ClienteService {
     public List<Cliente> listarTodosOsClientes() throws ClienteException {
         try {
             List<Cliente> clientes = clienteDao.listar();
-            if(!clientes.isEmpty()){
-                return clientes;
-            }else{
-                return null;
-            }
+            return clientes;
         } catch (Exception e) {
             throw new ClienteException("Erro ao listar clientes do banco de dados.", e);
         }
     }
 
-    public Cliente pesquisarClientePorId(Long id) throws ClienteException {
+        public Cliente pesquisarClientePorId(Long id) throws ClienteException {
         try {
             Cliente cliente = clienteDao.pesquisarPorId(id);
             return cliente;
