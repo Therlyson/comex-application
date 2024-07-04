@@ -1,7 +1,6 @@
 package org.example.services;
 
 import org.example.dao.JpaClienteDao;
-import org.example.exception.ClienteException;
 import org.example.exception.ComexException;
 import org.example.model.Cliente;
 

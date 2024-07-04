@@ -1,6 +1,7 @@
 package org.example.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "produto")
@@ -11,14 +12,17 @@ public class Produto {
     private String nome;
     private String descricao;
     private Double preco;
-    @ManyToOne
-    private Categoria categoria;
+    @ManyToMany
+    @JoinTable(name = "produto_categorias", //nome da tabela de junção
+            joinColumns = @JoinColumn(name = "produto_fk"), //nome da tabela principal na tabela de junção
+            inverseJoinColumns = @JoinColumn(name = "categoria_fk")) //nome da outra tabela na tabela de junção
+    private List<Categoria> categorias;
 
-    public Produto(String nome, String descricao, Double preco, Categoria categoria) {
+    public Produto(String nome, String descricao, Double preco, List<Categoria> categorias) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
-        this.categoria = categoria;
+        this.categorias = categorias;
     }
 
     public Produto(){}
@@ -55,22 +59,20 @@ public class Produto {
         this.preco = preco;
     }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public List<Categoria> getCategoria() {
+        return categorias;
     }
 
     @Override
     public String toString() {
-        return "Produto{" +
-                "id='" + id + '\'' +
-                ", nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", preco=" + preco +
-                ", Categoria=" + categoria.getNome() +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Produto{")
+                .append("id='").append(id).append('\'')
+                .append(", nome='").append(nome).append('\'')
+                .append(", descricao='").append(descricao).append('\'')
+                .append(", preco=").append(preco)
+                .append(", categorias=").append(categorias) // Assuming Categoria has a proper `toString()` method
+                .append('}');
+        return sb.toString();
     }
 }

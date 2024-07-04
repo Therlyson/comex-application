@@ -1,6 +1,7 @@
 package org.example.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "categoria")
@@ -10,6 +11,8 @@ public class Categoria {
     private Long id;
     private String nome;
     private String descricao;
+    @ManyToMany(mappedBy = "categorias")
+    private List<Produto> produtos;
 
     public Categoria(Long id, String nome, String descricao) {
         this.id = id;
@@ -46,6 +49,10 @@ public class Categoria {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public List<Produto> getProdutos() {
+        return produtos;
     }
 
     @Override

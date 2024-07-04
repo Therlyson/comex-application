@@ -41,12 +41,11 @@ public class ProdutoService {
         }
     }
 
-    public Produto alterarProduto(Long id, String nome, String descricao, Double preco, Categoria categoria){
+    public Produto alterarProduto(Long id, String nome, String descricao, Double preco){
         Produto produto = produtoDao.buscarPorId(id);
         produto.setNome(nome);
         produto.setDescricao(descricao);
         produto.setPreco(preco);
-        produto.setCategoria(categoria);
         try {
             return produtoDao.alterar(produto);
         } catch (Exception e) {

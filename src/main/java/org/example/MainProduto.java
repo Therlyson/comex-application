@@ -1,12 +1,13 @@
 package org.example;
 
-import org.example.model.Categoria;
+import  org.example.model.Categoria;
 import org.example.model.Produto;
 import org.example.services.CategoriaService;
 import org.example.services.ProdutoService;
 import org.example.utils.JPAutil;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -37,18 +38,30 @@ public class MainProduto {
                     System.out.print("Digite o preço do produto: ");
                     double preco = scanner.nextDouble();
 
-                    List<Categoria> categorias = categoriaService.listarCategorias();
-                    System.out.println("\nLista de categorias disponiveis:");
-                    for(Categoria c: categorias){
-                        System.out.println(c);
+                    boolean cadastrar = true;
+                    List<Categoria> categorias = new ArrayList<>();
+                    while(cadastrar){
+                        List<Categoria> categoriasExistentes = categoriaService.listarCategorias();
+                        System.out.println("\nLista de categorias disponiveis:");
+                        for(Categoria c: categoriasExistentes){
+                            System.out.println(c);
+                        }
+
+                        System.out.print("\nDigite o ID da categoria do novo produto: ");
+                        long categoriaId = scanner.nextLong();
+                        scanner.nextLine();
+
+                        Categoria categoria = categoriaService.buscarCategoriaId(categoriaId);
+                        categorias.add(categoria);
+
+                        System.out.println("Deseja adicionar mais uma categoria: ");
+                        String adicionar = scanner.nextLine();
+                        if(adicionar.equalsIgnoreCase("não")){
+                            cadastrar = false;
+                        }
                     }
 
-                    System.out.print("\nDigite o ID da categoria do novo produto: ");
-                    long categoriaId = scanner.nextLong();
-                    scanner.nextLine();
-
-                    Categoria categoria = categoriaService.buscarCategoriaId(categoriaId);
-                    Produto produto = new Produto(nome, descricao, preco, categoria);
+                    Produto produto = new Produto(nome, descricao, preco, categorias);
                     produtoService.cadastrarProduto(produto);
                     break;
 
@@ -78,17 +91,7 @@ public class MainProduto {
                     System.out.print("Digite o novo preço do produto: ");
                     double novoPreco = scanner.nextDouble();
 
-                    List<Categoria> categorias2 = categoriaService.listarCategorias();
-                    System.out.println("\nLista de categorias disponiveis:");
-                    for(Categoria c: categorias2){
-                        System.out.println(c);
-                    }
-                    System.out.print("\nDigite o novo ID da nova categoria do produto: ");
-                    long novaCategoriaId = scanner.nextLong();
-                    scanner.nextLine();
-
-                    Categoria novaCategoria = categoriaService.buscarCategoriaId(novaCategoriaId);
-                    Produto produtoAlterado = produtoService.alterarProduto(idAlterar, novoNome, novaDescricao, novoPreco, novaCategoria);
+                    Produto produtoAlterado = produtoService.alterarProduto(idAlterar, novoNome, novaDescricao, novoPreco);
                     System.out.println(produtoAlterado);
                     break;
 
