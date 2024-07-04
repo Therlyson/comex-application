@@ -39,9 +39,13 @@ public class MainProduto {
                     double preco = scanner.nextDouble();
 
                     boolean cadastrar = true;
-                    List<Categoria> categorias = new ArrayList<>();
+                    List<Categoria> categoriasEscolhidas = new ArrayList<>();
                     while(cadastrar){
                         List<Categoria> categoriasExistentes = categoriaService.listarCategorias();
+                        if(categoriasExistentes.isEmpty()){
+                            System.out.println("Não existem categorias cadastradas no momento, impossivel cadastrar um produto!");
+                            break;
+                        }
                         System.out.println("\nLista de categorias disponiveis:");
                         for(Categoria c: categoriasExistentes){
                             System.out.println(c);
@@ -50,19 +54,20 @@ public class MainProduto {
                         System.out.print("\nDigite o ID da categoria do novo produto: ");
                         long categoriaId = scanner.nextLong();
                         scanner.nextLine();
-
                         Categoria categoria = categoriaService.buscarCategoriaId(categoriaId);
-                        categorias.add(categoria);
+                        categoriasEscolhidas.add(categoria);
 
-                        System.out.println("Deseja adicionar mais uma categoria: ");
+                        System.out.println("Deseja adicionar mais uma categoria(N/S): ");
                         String adicionar = scanner.nextLine();
-                        if(adicionar.equalsIgnoreCase("não")){
+                        if(adicionar.equalsIgnoreCase("N")){
                             cadastrar = false;
                         }
                     }
 
-                    Produto produto = new Produto(nome, descricao, preco, categorias);
-                    produtoService.cadastrarProduto(produto);
+                    if(!cadastrar){
+                        Produto produto = new Produto(nome, descricao, preco, categoriasEscolhidas);
+                        produtoService.cadastrarProduto(produto);
+                    }
                     break;
 
                 case 2:

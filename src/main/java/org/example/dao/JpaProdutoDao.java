@@ -47,5 +47,4 @@ public class JpaProdutoDao {
         this.manager.remove(produto);
         this.manager.getTransaction().commit();
     }
-
 }

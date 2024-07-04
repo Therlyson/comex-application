@@ -66,13 +66,12 @@ public class Produto {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Produto{")
-                .append("id='").append(id).append('\'')
-                .append(", nome='").append(nome).append('\'')
-                .append(", descricao='").append(descricao).append('\'')
-                .append(", preco=").append(preco)
-                .append(", categorias=").append(categorias) // Assuming Categoria has a proper `toString()` method
-                .append('}');
+        sb.append("id = ").append(id)
+            .append("\nnome = ").append(nome)
+            .append("\ndescricao = ").append(descricao)
+            .append("\npreco = ").append(preco)
+            .append("\ncategorias = ").append(categorias)
+                .append("\n");// Assuming Categoria has a proper `toString()` method
         return sb.toString();
     }
 }
