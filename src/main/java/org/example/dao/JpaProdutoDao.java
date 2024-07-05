@@ -47,4 +47,12 @@ public class JpaProdutoDao {
         this.manager.remove(produto);
         this.manager.getTransaction().commit();
     }
+
+    //seleciona todos os produtos (p) que estão associados à categoria (c) cujo ID é igual a idCategoria.
+    public List<Produto> listarPorCategoria(Long idCategoria) {
+        String jpql = "SELECT p FROM Produto p JOIN p.categorias c WHERE c.id = :idCategoria";
+        return manager.createQuery(jpql, Produto.class)
+                .setParameter("idCategoria", idCategoria)
+                .getResultList();
+    }
 }

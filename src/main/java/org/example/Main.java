@@ -1,14 +1,18 @@
 package org.example;
 
-import org.example.model.Categoria;
-import org.example.model.Cliente;
-import org.example.model.Produto;
+import org.example.model.*;
+import org.example.model.enums.TipoDesconto;
+import org.example.model.enums.TipoDescontoProduto;
 import org.example.services.CategoriaService;
 import org.example.services.ClienteService;
+import org.example.services.PedidoService;
 import org.example.services.ProdutoService;
 import org.example.utils.JPAutil;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -25,7 +29,8 @@ public class Main {
             System.out.println("1. Operações com Clientes");
             System.out.println("2. Operações com Categorias");
             System.out.println("3. Operações com Produtos");
-            System.out.println("4. Sair");
+            System.out.println("4. Operações com Pedidos");
+            System.out.println("5. Sair");
             System.out.print("Opção: ");
             int option = scanner.nextInt();
             scanner.nextLine();
@@ -44,6 +49,10 @@ public class Main {
                     break;
 
                 case 4:
+                    operacoesPedido(scanner, manager);
+                    break;
+
+                case 5:
                     running = false;
                     break;
 
@@ -71,7 +80,8 @@ public class Main {
             System.out.println("3. Buscar cliente");
             System.out.println("4. Atualizar cliente");
             System.out.println("5. Deletar cliente");
-            System.out.println("6. Voltar ao menu principal");
+            System.out.println("6. Listar clientes por nome");
+            System.out.println("7. Voltar ao menu principal");
             System.out.print("Opção: ");
             int option = scanner.nextInt();
             scanner.nextLine();
@@ -98,6 +108,7 @@ public class Main {
                     if (clientes.isEmpty()) {
                         System.out.println("Não existe clientes no banco!");
                     } else {
+                        System.out.println("\nTodos os clientes casdastrados no banco de dados: ");
                         for (Cliente c : clientes) {
                             System.out.println(c);
                         }
@@ -105,7 +116,7 @@ public class Main {
                     break;
 
                 case 3:
-                    System.out.print("ID do cliente a buscar: ");
+                    System.out.print("\nID do cliente a buscar: ");
                     Long id = scanner.nextLong();
                     scanner.nextLine();
                     Cliente clienteBuscado = clienteService.pesquisarClientePorId(id);
@@ -117,7 +128,7 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.print("ID do cliente a atualizar: ");
+                    System.out.print("\nID do cliente a atualizar: ");
                     Long idAtualizar = scanner.nextLong();
                     scanner.nextLine();
 
@@ -135,14 +146,14 @@ public class Main {
                         clienteParaAtualizar.setCep(scanner.nextLine());
 
                         Cliente clienteAtualizado = clienteService.atualizarCliente(clienteParaAtualizar);
-                        System.out.println("Cliente atualizado: " + clienteAtualizado);
+                        System.out.println("\nCliente atualizado: " + clienteAtualizado);
                     } else {
                         System.out.println("Cliente não encontrado");
                     }
                     break;
 
                 case 5:
-                    System.out.print("ID do cliente a deletar: ");
+                    System.out.print("\nID do cliente a deletar: ");
                     Long idDeletar = scanner.nextLong();
                     scanner.nextLine();
                     clienteService.removerCLiente(idDeletar);
@@ -150,6 +161,18 @@ public class Main {
                     break;
 
                 case 6:
+                    List<String> clientesPorNome = clienteService.listarClientesPorNome();
+                    if (clientesPorNome.isEmpty()) {
+                        System.out.println("\nNão existe clientes no banco!");
+                    } else {
+                        System.out.println("\nTodos os nomes de clientes no banco de dados: ");
+                        for (String c : clientesPorNome) {
+                            System.out.println(" - " + c);
+                        }
+                    }
+                    break;
+
+                case 7:
                     running = false;
                     break;
 
@@ -267,7 +290,8 @@ public class Main {
             System.out.println("3. Consultar produtos por ordem de nome");
             System.out.println("4. Alterar produto");
             System.out.println("5. Remover Produto");
-            System.out.println("6. Voltar ao menu principal");
+            System.out.println("6. Listar produtos por categoria");
+            System.out.println("7. Voltar ao menu principal");
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
@@ -278,7 +302,7 @@ public class Main {
                     System.out.print("Digite a descrição do produto: ");
                     String descricao = scanner.nextLine();
                     System.out.print("Digite o preço do produto: ");
-                    double preco = scanner.nextDouble();
+                    BigDecimal preco = scanner.nextBigDecimal();
 
                     boolean cadastrar = true;
                     List<Categoria> categoriasEscolhidas = new ArrayList<>();
@@ -322,12 +346,12 @@ public class Main {
                 case 3:
                     List<String> produtosPorNome = produtoService.consultarProdutosPorNome();
                     for (String ps : produtosPorNome) {
-                        System.out.println(ps);
+                        System.out.println(" - " + ps);
                     }
                     break;
 
                 case 4:
-                    System.out.print("Digite o ID do produto a ser alterado: ");
+                    System.out.print("\nDigite o ID do produto a ser alterado: ");
                     long idAlterar = scanner.nextLong();
                     scanner.nextLine();
 
@@ -336,14 +360,14 @@ public class Main {
                     System.out.print("Digite a nova descrição do produto: ");
                     String novaDescricao = scanner.nextLine();
                     System.out.print("Digite o novo preço do produto: ");
-                    double novoPreco = scanner.nextDouble();
+                    BigDecimal novoPreco = scanner.nextBigDecimal();
 
                     Produto produtoAlterado = produtoService.alterarProduto(idAlterar, novoNome, novaDescricao, novoPreco);
                     System.out.println(produtoAlterado);
                     break;
 
                 case 5:
-                    System.out.print("Digite o ID do produto a ser removido: ");
+                    System.out.print("\nDigite o ID do produto a ser removido: ");
                     long idRemover = scanner.nextLong();
                     scanner.nextLine();
 
@@ -351,6 +375,19 @@ public class Main {
                     break;
 
                 case 6:
+                    System.out.println("\nDigite o ID da categoria que deseja listar os produtos: ");
+                    long idCategoria = scanner.nextLong();
+                    scanner.nextLine();
+                    Categoria categoria = categoriaService.buscarCategoriaId(idCategoria);
+                    if(categoria!=null){
+                        List<Produto> produtosCategoria = produtoService.listarProdutosPorCategoria(idCategoria);
+                        produtosCategoria.forEach(System.out::println);
+                    }else {
+                        System.out.println("Erro! não existe essa categoria cadastrada!");
+                    }
+                    break;
+
+                case 7:
                     running = false;
                     break;
 
@@ -359,6 +396,122 @@ public class Main {
                     break;
             }
             System.out.println();
+        }
+    }
+
+    private static void operacoesPedido(Scanner scanner, EntityManager manager){
+        PedidoService pedidoService = new PedidoService(manager);
+        boolean running = true;
+
+        while (running) {
+            System.out.println("\nEscolha uma opção:");
+            System.out.println("1. Cadastrar Pedido");
+            System.out.println("2. Buscar Pedido por ID");
+            System.out.println("3. Listar todos os Pedidos");
+            System.out.println("4. Buscar pedidos por data");
+            System.out.println("5. Voltar ao menu principal");
+
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consumir nova linha
+
+            switch (opcao) {
+                case 1:
+                    ClienteService clienteService = new ClienteService(manager);
+                    ProdutoService produtoService = new ProdutoService(manager);
+
+                    System.out.print("Digite o id do cliente que fez o pedido: ");
+                    Long idCliente = scanner.nextLong();
+                    Cliente cliente = clienteService.pesquisarClientePorId(idCliente);
+                    if (cliente == null) {
+                        System.out.println("Cliente não encontrado. Por favor, cadastre o cliente primeiro.");
+                        return;
+                    }
+
+                    System.out.println("Digite o desconto do pedido:");
+                    BigDecimal descontoPedido = scanner.nextBigDecimal();
+                    scanner.nextLine(); // Consumir nova linha
+
+                    System.out.println("Escolha o tipo de desconto (FIDELIDADE ou NENHUM):");
+                    String tipoDescontoStr = scanner.nextLine();
+                    TipoDesconto tipoDesconto = TipoDesconto.valueOf(tipoDescontoStr);
+
+                    Pedido pedido = new Pedido(descontoPedido, tipoDesconto, cliente);
+
+                    while (true) {
+                        System.out.println("Deseja adicionar um item ao pedido? (s/n)");
+                        String resposta = scanner.nextLine();
+                        if (resposta.equalsIgnoreCase("n")) {
+                            break;
+                        }
+
+                        System.out.println("Digite o ID do produto:");
+                        Long idProduto = scanner.nextLong();
+                        Produto produto = produtoService.buscarProdutoId(idProduto);
+                        if (produto == null) {
+                            System.out.println("Produto não encontrado.");
+                            continue;
+                        }
+
+                        System.out.println("Digite a quantidade:");
+                        int quantidade = scanner.nextInt();
+
+                        System.out.println("Digite o desconto do item:");
+                        BigDecimal descontoItem = scanner.nextBigDecimal();
+                        scanner.nextLine(); // Consumir nova linha
+
+                        System.out.println("Escolha o tipo de desconto do item (PROMOCAO, QUANTIDADE, NENHUM):");
+                        String tipoDescontoItemStr = scanner.nextLine();
+                        TipoDescontoProduto tipoDescontoItem = TipoDescontoProduto.valueOf(tipoDescontoItemStr);
+
+                        ItemDePedido itemDePedido = new ItemDePedido(quantidade, produto.getPreco(), descontoItem, produto, pedido, tipoDescontoItem);
+                        pedido.adicionarItem(itemDePedido);
+                    }
+
+                    pedidoService.cadastrarPedido(pedido);
+                    System.out.println("Pedido cadastrado com sucesso!");
+                    break;
+                case 2:
+                    System.out.print("\nDigite o ID do pedido a ser buscado: ");
+                    Long idBusca = scanner.nextLong();
+                    scanner.nextLine();
+
+                    Pedido pedidoBuscado = pedidoService.buscarPedidoId(idBusca);
+                    if (pedidoBuscado != null) {
+                        System.out.println("Pedido encontrado: " + pedidoBuscado);
+                    } else {
+                        System.out.println("Pedido com ID " + idBusca + " não encontrado.");
+                    }
+                    break;
+                case 3:
+                    List<Pedido> pedidos = pedidoService.listarPedidos();
+                    System.out.println("\nPedidos cadastrados:");
+                    for (Pedido pedido1 : pedidos) {
+                        System.out.println(pedido1);
+                    }
+                    break;
+
+                case 4:
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    System.out.println("\nDigite a data que está buscando os pedidos(EX: 2024-07-05): ");
+                    String dataString = scanner.nextLine();
+
+                    LocalDate data = LocalDate.parse(dataString, formatter);
+                    List<Pedido> pedidosPorData = pedidoService.buscarPedidosPorData(data);
+                    if(pedidosPorData.isEmpty()) {
+                        System.out.println("Não existem pedidos para essa data");
+                    }else{
+                        pedidosPorData.forEach(System.out::println);
+                    }
+                    break;
+
+                case 5:
+                    running = false;
+                    break;
+
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
+                    break;
+            }
         }
     }
 }

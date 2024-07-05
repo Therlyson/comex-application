@@ -73,7 +73,7 @@ public class Produto {
             .append("\ndescricao = ").append(descricao)
             .append("\npreco = ").append(preco)
             .append("\ncategorias = ").append(categorias)
-                .append("\n");// Assuming Categoria has a proper `toString()` method
+                .append("\n");
         return sb.toString();
     }
 }

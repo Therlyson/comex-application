@@ -91,8 +91,8 @@ public class Pedido {
                 ", dataCadastro=" + dataCadastro +
                 ", desconto=" + desconto +
                 ", tipoDesconto=" + tipoDesconto +
-                ", cLiente=" + cLiente +
-                ", itens=" + itens +
+                ", cliente=" + (cLiente != null ? cLiente.getId() : null) +
+                ", itens=" + itens.stream().map(ItemDePedido::getId).toList() +
                 '}';
     }
 }

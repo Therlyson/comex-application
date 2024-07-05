@@ -104,8 +104,8 @@ public class ItemDePedido {
                 ", quantidade=" + quantidade +
                 ", precoUnitario=" + precoUnitario +
                 ", desconto=" + desconto +
-                ", produto=" + produto +
-                ", pedido=" + pedido +
+                ", produto=" + (produto != null ? produto.getId() : null) +
+                ", pedido=" + (pedido != null ? pedido.getId() : null) +
                 ", tipoDesconto=" + tipoDesconto +
                 '}';
     }

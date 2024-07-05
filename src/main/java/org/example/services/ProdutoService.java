@@ -4,6 +4,7 @@ import org.example.conexao.ConnectionFactory;
 import org.example.dao.JpaProdutoDao;
 import org.example.exception.ComexException;
 import org.example.model.Categoria;
+import org.example.model.Pedido;
 import org.example.model.Produto;
 
 import javax.persistence.EntityManager;
@@ -34,6 +35,15 @@ public class ProdutoService {
         }
     }
 
+    public Produto buscarProdutoId(Long id){
+        try{
+            Produto produto = produtoDao.buscarPorId(id);
+            return produto;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel buscar esse produto do banco de dados.", e);
+        }
+    }
+
     public List<String> consultarProdutosPorNome(){
         try {
             return produtoDao.consultarPorNome();
@@ -60,6 +70,14 @@ public class ProdutoService {
             produtoDao.remover(produto);
         } catch (Exception e) {
             throw new ComexException("Erro ao listar os produtos do banco de dados.", e);
+        }
+    }
+
+    public List<Produto> listarProdutosPorCategoria(Long id){
+        try{
+            return produtoDao.listarPorCategoria(id);
+        }catch (Exception e){
+            throw new ComexException("Erro ao listar os produtos por uma categoria no banco de dados.", e);
         }
     }
 }

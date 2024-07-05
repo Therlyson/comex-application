@@ -57,4 +57,12 @@ public class ClienteService {
             throw new ComexException("Erro ao tentar remover cliente do banco de dados.", e);
         }
     }
+
+    public List<String> listarClientesPorNome() throws ComexException {
+        try{
+            return clienteDao.listarPorNome();
+        }catch (Exception e){
+            throw new ComexException("Erro ao tentar listar clientes do banco de dados.", e);
+        }
+    }
 }

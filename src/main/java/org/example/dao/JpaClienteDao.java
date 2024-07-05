@@ -43,4 +43,9 @@ public class JpaClienteDao {
         this.manager.getTransaction().commit();
     }
 
+    public List<String> listarPorNome(){
+        String jpql = "SELECT c.nome FROM Cliente c";
+        return manager.createQuery(jpql, String.class).getResultList();
+    }
+
 }

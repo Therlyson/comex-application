@@ -5,7 +5,9 @@ import org.example.exception.ComexException;
 import org.example.model.Pedido;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 
 public class PedidoService {
     private PedidoDAO pedidoDAO;
@@ -39,4 +41,14 @@ public class PedidoService {
             throw new ComexException("Erro! Não foi possivel buscar esse pedido do banco de dados.", e);
         }
     }
+
+    public List<Pedido> buscarPedidosPorData(LocalDate data){
+        try{
+            List<Pedido> pedidos = pedidoDAO.buscarPorData(data);
+            return pedidos;
+        }catch (Exception e){
+            throw new ComexException("Erro! Não foi possivel listar os pedidos com base na data do banco de dados.", e);
+        }
+    }
+
 }

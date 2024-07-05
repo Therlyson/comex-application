@@ -7,6 +7,7 @@ import org.example.services.ProdutoService;
 import org.example.utils.JPAutil;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class MainProduto {
                     System.out.print("Digite a descrição do produto: ");
                     String descricao = scanner.nextLine();
                     System.out.print("Digite o preço do produto: ");
-                    double preco = scanner.nextDouble();
+                    BigDecimal preco = scanner.nextBigDecimal();
 
                     boolean cadastrar = true;
                     List<Categoria> categoriasEscolhidas = new ArrayList<>();
@@ -94,7 +95,7 @@ public class MainProduto {
                     System.out.print("Digite a nova descrição do produto: ");
                     String novaDescricao = scanner.nextLine();
                     System.out.print("Digite o novo preço do produto: ");
-                    double novoPreco = scanner.nextDouble();
+                    BigDecimal novoPreco = scanner.nextBigDecimal();
 
                     Produto produtoAlterado = produtoService.alterarProduto(idAlterar, novoNome, novaDescricao, novoPreco);
                     System.out.println(produtoAlterado);
