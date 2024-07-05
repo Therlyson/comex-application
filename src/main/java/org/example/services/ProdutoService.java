@@ -7,6 +7,7 @@ import org.example.model.Categoria;
 import org.example.model.Produto;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class ProdutoService {
         }
     }
 
-    public Produto alterarProduto(Long id, String nome, String descricao, Double preco){
+    public Produto alterarProduto(Long id, String nome, String descricao, BigDecimal preco){
         Produto produto = produtoDao.buscarPorId(id);
         produto.setNome(nome);
         produto.setDescricao(descricao);

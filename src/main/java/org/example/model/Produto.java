@@ -1,6 +1,8 @@
 package org.example.model;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 @Entity
@@ -11,14 +13,14 @@ public class Produto {
     private Long id;
     private String nome;
     private String descricao;
-    private Double preco;
+    private BigDecimal preco;
     @ManyToMany
     @JoinTable(name = "produto_categorias", //nome da tabela de junção
             joinColumns = @JoinColumn(name = "produto_fk"), //nome da tabela principal na tabela de junção
             inverseJoinColumns = @JoinColumn(name = "categoria_fk")) //nome da outra tabela na tabela de junção
     private List<Categoria> categorias;
 
-    public Produto(String nome, String descricao, Double preco, List<Categoria> categorias) {
+    public Produto(String nome, String descricao, BigDecimal preco, List<Categoria> categorias) {
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
@@ -51,11 +53,11 @@ public class Produto {
         this.descricao = descricao;
     }
 
-    public Double getPreco() {
+    public BigDecimal getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(BigDecimal preco) {
         this.preco = preco;
     }
 
