@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/categoria/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/categoria/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cliente/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/cliente/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/comexRun/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/comexRun/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infraestrutura/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/infraestrutura/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pedido/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pedido/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/produto/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/produto/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
